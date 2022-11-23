@@ -79,16 +79,17 @@ initialState _ = Initial
 
 render :: forall s. State -> ComponentHTML Action s AppM
 render Initial = button
-render (Ready m) = H.div_ [button, H.text $ show (Map.size m) <> " utxos"]
+render (Ready m) = H.div_ [ button, H.text $ show (Map.size m) <> " utxos" ]
 
 button :: forall s. ComponentHTML Action s AppM
-button = H.button [HE.onClick \_ -> ButtonPush] [H.text "Press"]
+button = H.button [ HE.onClick \_ -> ButtonPush ] [ H.text "Press" ]
 
 eval ::
   forall query slots input output.
   HalogenQ query Action input ~>
     HalogenM State Action slots output AppM
-eval = mkEval defaultEval {initialize = Just Initialize, handleAction = handleAction}
+eval = mkEval defaultEval
+  { initialize = Just Initialize, handleAction = handleAction }
 
 handleAction ::
   forall s o.
