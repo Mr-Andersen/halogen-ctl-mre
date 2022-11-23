@@ -74,6 +74,10 @@ data Action
   = Initialize
   | ButtonPush
 
+instance Show Action where
+  show Initialize = "Initialize"
+  show ButtonPush = "ButtonPush"
+
 initialState :: Input -> State
 initialState _ = Initial
 
@@ -95,8 +99,9 @@ handleAction ::
   forall s o.
   Action ->
   HalogenM State Action s o AppM Unit
-handleAction _ = do
+handleAction action = do
   ownUtxos <- lift do
+    logInfo' $ "action = " <> show action
     logInfo' "Run getWalletAddress"
     ownAddr <- liftedM "Failed `getWalletAddress`" getWalletAddress
     logInfo' "Run utxosAt"
